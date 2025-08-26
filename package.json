@@ -1,0 +1,22 @@
+{
+  "name": "icontrol-crm",
+  "private": true,
+  "packageManager": "pnpm@9.6.0",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "db:introspect": "pnpm --filter @icontrol/api db:introspect"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.11",
+    "@types/react": "^18.3.23",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.2",
+    "turbo": "^2.0.6",
+    "typescript": "^5.9.2"
+  }
+}

@@ -1,0 +1,11 @@
+node_modules/
+apps/**/.next/
+dist/
+coverage/
+.turbo/
+.pnpm-store/
+*.log
+.env
+.env.local
+apps/**/.env
+apps/**/.env.local
