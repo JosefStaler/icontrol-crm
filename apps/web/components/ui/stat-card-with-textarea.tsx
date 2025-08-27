@@ -1,25 +1,31 @@
+"use client";
 import { ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import { cn } from "@/lib/utils";
 
-interface StatCardProps {
+interface StatCardWithTextareaProps {
   title: string;
   subtitle?: string;
   value: string | number;
   icon: ReactNode;
-  trend?: {
-    value?: number;
-    isPositive: boolean;
-    description?: string;
-    hideValue?: boolean;
-    percentageColor?: string;
-  };
+  textareaTitle?: string;
+  textareaValue?: string;
   variant?: "default" | "success" | "warning" | "accent" | "danger" | "amber";
   className?: string;
   size?: "sm" | "md";
 }
 
-export function StatCard({ title, subtitle, value, icon, trend, variant = "default", className, size = "md" }: StatCardProps) {
+export function StatCardWithTextarea({ 
+  title, 
+  subtitle, 
+  value, 
+  icon, 
+  textareaTitle = "Observações",
+  textareaValue = "",
+  variant = "default", 
+  className, 
+  size = "md" 
+}: StatCardWithTextareaProps) {
   const getVariantStyles = () => {
     switch (variant) {
       case "success":
@@ -41,9 +47,8 @@ export function StatCard({ title, subtitle, value, icon, trend, variant = "defau
   const headerY = "py-0";
   const contentPadding = size === "sm" ? "px-3 py-2" : "px-4 py-2";
   const valueTextSize = size === "sm" ? "text-[22px]" : "text-[26px]";
-  const percentTextSize = size === "sm" ? "text-[18px]" : "text-[20px]";
   const iconBoxSize = size === "sm" ? "h-6 w-6" : "h-8 w-8";
-  const cardHeight = size === "sm" ? "min-h-[110px]" : "min-h-[126px]";
+  const cardHeight = size === "sm" ? "min-h-[140px]" : "min-h-[160px]";
 
   const getIconStyles = () => {
     switch (variant) {
@@ -69,10 +74,10 @@ export function StatCard({ title, subtitle, value, icon, trend, variant = "defau
       getVariantStyles(),
       className
     )}>
-             <CardHeader className={cn("flex flex-row items-center justify-between space-y-0 p-0 border-b-0", headerPadding, headerY) }>
-         <CardTitle className="text-base font-semibold text-slate-700 leading-tight text-center flex-1">
-           {title}
-         </CardTitle>
+      <CardHeader className={cn("flex flex-row items-center justify-between space-y-0 p-0 border-b-0", headerPadding, headerY) }>
+        <CardTitle className="text-base font-semibold text-slate-700 leading-tight text-center flex-1">
+          {title}
+        </CardTitle>
         <div className={cn(
           "flex items-center justify-center rounded-lg",
           iconBoxSize,
@@ -81,31 +86,33 @@ export function StatCard({ title, subtitle, value, icon, trend, variant = "defau
           {icon}
         </div>
       </CardHeader>
-      <CardContent className={cn(contentPadding, "flex-1 flex flex-col justify-center") }>
-                 {subtitle && (
-           <p className="text-sm text-slate-600 mb-2 font-medium">
-             {subtitle}
-           </p>
-         )}
-        <div className={cn(
-          "flex items-center gap-1.5",
-          !trend && !subtitle && "-mt-4"
-        )}>
-          <span className={cn("inline-block align-middle font-bold leading-none", valueTextSize)}>{value}</span>
-          {trend && !trend.hideValue && trend.value !== undefined && (
-            <span className={cn("inline-block align-middle font-bold leading-none", percentTextSize)}>
-              ({trend.value}%)
-            </span>
-          )}
-        </div>
-                  {trend && (
-            <p className={cn(
-              "text-xs flex items-center mt-6 text-slate-600 leading-none"
-            )}>
-              <span className="mr-1">↗</span>
-              {trend.description || "Em relação às retiradas entrantes"}
+      <CardContent className={cn(contentPadding, "flex-1 flex flex-col justify-between") }>
+        <div className="flex-1">
+          {subtitle && (
+            <p className="text-sm text-slate-600 mb-2 font-medium">
+              {subtitle}
             </p>
           )}
+          <div className={cn(
+            "flex items-baseline gap-1.5",
+            !subtitle && "-mt-4"
+          )}>
+            <span className={cn("inline-block align-middle font-bold leading-none", valueTextSize)}>{value}</span>
+          </div>
+        </div>
+        
+        <div className="mt-3">
+          <label className="block text-xs font-medium text-slate-600 mb-1">
+            {textareaTitle}
+          </label>
+          <textarea
+            className="w-full h-16 px-2 py-1 text-sm border border-slate-300 rounded resize-none bg-white/80 whitespace-pre-line leading-tight overflow-hidden"
+            value={textareaValue}
+            readOnly
+            disabled
+            placeholder="Observações..."
+          />
+        </div>
       </CardContent>
     </Card>
   );

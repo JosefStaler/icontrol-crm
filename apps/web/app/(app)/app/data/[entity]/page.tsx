@@ -7,8 +7,6 @@ import { EntityInlineEditor } from '@/components/EntityInlineEditor';
 import { getEntityConfig } from '@/lib/entities';
 import { useSession } from '@/lib/auth';
 
-const fetcher = (url: string) => fetch(url, { credentials: 'include' }).then((r) => r.json());
-
 export default function EntityPage() {
   const params = useParams();
   const router = useRouter();
@@ -18,7 +16,11 @@ export default function EntityPage() {
   const page = Number(search.get('page') ?? '1');
   const sort = search.get('sort') ?? undefined;
   const filter = search.get('filter') ?? undefined;
-  const { data, mutate } = useSWR(`/api/entities/${entity}?page=${page}&pageSize=20${sort ? `&sort=${sort}` : ''}${filter ? `&filter=${encodeURIComponent(filter)}` : ''}`, fetcher);
+  const { data, mutate } = useSWR(`/api/entities/${entity}?page=${page}&pageSize=20${sort ? `&sort=${sort}` : ''}${filter ? `&filter=${encodeURIComponent(filter)}` : ''}`, null, {
+    refreshInterval: 30000,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  });
 
   const rows = data?.data ?? [];
   const total = data?.total ?? 0;

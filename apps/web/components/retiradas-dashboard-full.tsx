@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo } from 'react';
 import { StatCard } from './ui/stat-card';
+import { StatCardWithTextarea } from './ui/stat-card-with-textarea';
 import { ClipboardList, CheckCircle, AlertTriangle, FileSpreadsheet, XCircle } from 'lucide-react';
 import { Charts } from './retiradas/charts';
 
@@ -258,11 +259,47 @@ export function RetiradasDashboard({ rows, monthName, year, tecnicoFilter = [], 
 
   return (
     <div className="space-y-6">
-      <div className={`grid grid-cols-3 gap-4 auto-rows-fr${debug ? ' outline outline-1 outline-red-300' : ''}`}>
-        <StatCard size="sm" className={`h-full min-w-0 w-full${debug ? ' outline outline-1 outline-blue-300' : ''}`} title={`Total Entrantes em ${referenceMonthName}/${referenceYear}`} value={referenceMonthServices.length} icon={<ClipboardList className="h-5 w-5" />} variant="accent" />
-        <StatCard size="sm" className={`h-full min-w-0 w-full${debug ? ' outline outline-1 outline-blue-300' : ''}`} title={`FIBRA Entrantes em ${referenceMonthName}/${referenceYear}`} value={referenciaFibraTotalAll} icon={<ClipboardList className="h-5 w-5" />} variant="accent" />
-        <StatCard size="sm" className={`h-full min-w-0 w-full${debug ? ' outline outline-1 outline-blue-300' : ''}`} title={`PAYTV Entrantes em ${referenceMonthName}/${referenceYear}`} value={referenciaOutrosTotalAll} icon={<ClipboardList className="h-5 w-5" />} variant="accent" />
-      </div>
+             <div className={`grid grid-cols-3 gap-4 auto-rows-fr${debug ? ' outline outline-1 outline-red-300' : ''}`}>
+         <StatCardWithTextarea 
+           size="sm" 
+           className={`h-full min-w-0 w-full${debug ? ' outline outline-1 outline-blue-300' : ''}`} 
+           title="Estatísticas de Retiradas - GERAL" 
+           subtitle="Retiradas Entrantes no Período" 
+           value={referenceMonthServices.length} 
+           icon={<ClipboardList className="h-5 w-5" />} 
+           variant="accent"
+           textareaTitle="Observações"
+           textareaValue={`- Quantidade de retiradas entrantes independente de Status;
+
+- O Percentual da meta não considera itens cancelados.`}
+         />
+         <StatCardWithTextarea 
+           size="sm" 
+           className={`h-full min-w-0 w-full${debug ? ' outline outline-1 outline-blue-300' : ''}`} 
+           title="Estatísticas de Retiradas - FIBRA" 
+           subtitle="Retiradas Entrantes no Período" 
+           value={referenciaFibraTotalAll} 
+           icon={<ClipboardList className="h-5 w-5" />} 
+           variant="accent"
+           textareaTitle="Observações"
+           textareaValue={`- Quantidade de retiradas entrantes independente de Status;
+
+- O Percentual da meta não considera itens cancelados.`}
+         />
+         <StatCardWithTextarea 
+           size="sm" 
+           className={`h-full min-w-0 w-full${debug ? ' outline outline-1 outline-blue-300' : ''}`} 
+           title="Estatísticas de Retiradas - PAYTV" 
+           subtitle="Retiradas Entrantes no Período" 
+           value={referenciaOutrosTotalAll} 
+           icon={<ClipboardList className="h-5 w-5" />} 
+           variant="accent"
+           textareaTitle="Observações"
+           textareaValue={`- Quantidade de retiradas entrantes independente de Status;
+
+- O Percentual da meta não considera itens cancelados.`}
+         />
+       </div>
 
       <div className={`grid grid-cols-3 gap-4${debug ? ' outline outline-1 outline-green-300' : ''}`}>
         <div className={`space-y-4 min-w-0 flex flex-col w-full${debug ? ' outline outline-1 outline-blue-200' : ''}`}>

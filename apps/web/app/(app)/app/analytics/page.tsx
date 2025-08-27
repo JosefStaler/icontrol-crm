@@ -5,8 +5,6 @@ import useSWRMutation from 'swr/mutation';
 import { Guarded } from '@/components/Guarded';
 import { useSession } from '@/lib/auth';
 
-const fetcher = (u: string) => fetch(u, { credentials: 'include' }).then((r) => r.json());
-
 export default function AnalyticsPage() {
   const today = new Date();
   const yyyy = today.getFullYear();
@@ -14,14 +12,21 @@ export default function AnalyticsPage() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const { authenticated, loading } = useSession();
-  const { data: preset } = useSWR(authenticated ? '/api/dashboard-settings/retiradas' : null, fetcher);
+  const { data: preset } = useSWR(authenticated ? '/api/dashboard-settings/retiradas' : null);
   const presetMonth = preset?.settings?.month as string | undefined;
   const presetYear = preset?.settings?.year as string | undefined;
   const effectiveMonth = month || presetMonth || mm;
   const effectiveYear = year || presetYear || String(yyyy);
   const { data, isLoading, mutate } = useSWR(
     authenticated ? `/api/reports/retiradas?month=${encodeURIComponent(effectiveMonth)}&year=${effectiveYear}` : null,
-    fetcher,
+    null,
+    {
+      refreshInterval: 30000, // 30 segundos para dados do dashboard
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      errorRetryCount: 3,
+      errorRetryInterval: 5000,
+    }
   );
 
   const rows: any[] = useMemo(() => (Array.isArray(data) ? data : data?.data ?? []), [data]);

@@ -2,10 +2,12 @@
 import useSWR from 'swr';
 import { useState } from 'react';
 
-const fetcher = (url: string) => fetch(url, { credentials: 'include' }).then((r) => r.json());
-
 export default function UsersAdminPage() {
-  const { data, mutate } = useSWR('/api/users');
+  const { data, mutate } = useSWR('/api/users', null, {
+    refreshInterval: 30000,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  });
   const users = data?.data ?? [];
 
   const [openCreate, setOpenCreate] = useState(false);

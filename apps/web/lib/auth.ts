@@ -1,12 +1,29 @@
 "use client";
 import useSWR from 'swr';
 
-const fetcher = (url: string) => fetch(url, { credentials: 'include' }).then((r) => r.json());
-
 export function useSession() {
-  const { data, isLoading } = useSWR('/api/auth/me', fetcher, { refreshInterval: 60_000 });
-  return { user: data?.user, authenticated: Boolean(data?.authenticated), loading: isLoading };
+  const { data, isLoading, error } = useSWR('/api/auth/me', null, { 
+    refreshInterval: 30000, // 30 segundos
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    errorRetryCount: 3,
+    errorRetryInterval: 5000,
+    onError: (error) => {
+      console.error('Session Error:', error);
+    },
+  });
+  
+  return { 
+    user: data?.user, 
+    authenticated: Boolean(data?.authenticated), 
+    loading: isLoading,
+    error 
+  };
 }
+
+// Re-export do novo hook para compatibilidade
+export { useAuth } from './auth-hook';
+
 
 
 

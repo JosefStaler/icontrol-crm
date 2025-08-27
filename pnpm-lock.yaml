@@ -144,6 +144,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@icontrol/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@tanstack/react-query':
         specifier: ^5.51.1
         version: 5.85.5(react@18.2.0)

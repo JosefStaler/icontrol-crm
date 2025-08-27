@@ -4,11 +4,9 @@ import { useMemo, useState } from 'react';
 import { RetiradasDashboard } from '@/components/retiradas-dashboard-full';
 import { useSession } from '@/lib/auth';
 
-const fetcher = (u: string) => fetch(u, { credentials: 'include' }).then((r) => r.json());
-
 export default function DashboardRetiradas() {
   const { authenticated } = useSession();
-  const { data: settingsData } = useSWR(authenticated ? `/api/dashboard-settings/retiradas` : null, fetcher);
+  const { data: settingsData } = useSWR(authenticated ? `/api/dashboard-settings/retiradas` : null);
   const settings = settingsData?.settings || {};
   const month = settings.month || '';
   const year = settings.year || '';
@@ -20,7 +18,14 @@ export default function DashboardRetiradas() {
   const effectiveYear = year || fallbackYear;
   const { data } = useSWR(
     authenticated ? `/api/reports/retiradas?month=${encodeURIComponent(effectiveMonth)}&year=${effectiveYear}` : null,
-    fetcher,
+    null,
+    {
+      refreshInterval: 30000, // 30 segundos para dados do dashboard
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      errorRetryCount: 3,
+      errorRetryInterval: 5000,
+    }
   );
   const rows: any[] = useMemo(() => (Array.isArray(data) ? data : data?.data ?? []), [data]);
 
